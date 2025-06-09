@@ -1,8 +1,8 @@
 name: Actualizar datos Movebank
 
-#on:
- # schedule:
-   # - cron: '0 */12 * * *'  # Ejecutar cada 12 horas
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Ejecutar cada 24 horas
   workflow_dispatch:
 
 jobs:
@@ -64,7 +64,7 @@ jobs:
       run: |
         git config --global user.name "github-actions"
         git config --global user.email "actions@github.com"
-        git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/BioChess/Interactive_map_web.git
+        git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/BioChess/Map_Larus_Alboran.git
         git fetch origin main
         git reset --hard origin/main
 
