@@ -17,7 +17,7 @@ loginStored <- movebankLogin(username = user, password = password)
 print(loginStored)
 
 # Storing the study name
-st <- "AMPLIAMAR (Larus, Alboran)"
+st <- "AMPLIAMAR (Gulls, Alboran)"
 #print(paste("Study name:", st))  # Debugging
 
 # Verify if study exists
