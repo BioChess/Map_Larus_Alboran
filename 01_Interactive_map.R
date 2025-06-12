@@ -19,14 +19,14 @@ gps.df2 <- gps.df %>% filter(datetimeGMT >= lst_days)
 # Crear la paleta de colores para cada birdID
 pal.colors <- colorFactor(palette = "Set1", domain = gps.df$birdID)
 
-# Crear las paletas de colores para LARFUS y LARMIC
+# Crear las paletas de colores para ICHAUD y LARMIC
 green_palette <- colorRampPalette(c("gold4", "darkorange"))(10)
 orange_palette <- colorRampPalette(c("lightgreen", "darkgreen"))(10)
 
 # Función para asignar colores según el prefijo del birdID
 get_color <- function(birdID) {
   if (startsWith(as.character(birdID), "6")) {
-    # LARFUS: BirdID empieza con "6"
+    # ICHAUD: BirdID empieza con "6"
     return(sample(green_palette, 1))
   } else if (startsWith(as.character(birdID), "7")) {
     # LARMIC: BirdID empieza con "7"
