@@ -30,64 +30,29 @@ jobs:
           libgdal-dev \
           pandoc \
           libudunits2-dev \
-          libproj-dev \
-          libssl-dev \
-          libxml2-dev
-
-    - name: Configurar repositorios R
-      run: |
-        echo 'options(repos = c(CRAN = "https://cloud.r-project.org"))' >> ~/.Rprofile
-        echo 'options(HTTPUserAgent = sprintf("R/%s R (%s)", getRversion(), paste(getRversion(), R.version$platform, R.version$arch, R.version$os)))' >> ~/.Rprofile
+          libproj-dev
 
     - name: Instalar paquetes R
       run: |
-        # Instalar paquetes básicos primero
-        Rscript -e 'install.packages(c("pacman", "remotes", "httr", "htmlwidgets"))'
-        
-        # Intentar instalar 'move' desde diferentes fuentes
-        Rscript -e '
-          if (!require("move")) {
-            message("Intentando instalar move desde CRAN...")
-            tryCatch({
-              install.packages("move")
-            }, error = function(e) {
-              message("Falló CRAN estándar, intentando con repositorio alternativo...")
-              remotes::install_version("move", version = "4.0.6", repos = "https://cloud.r-project.org")
-            })
-          }'
-        
-        # Verificar instalación de 'move'
-        Rscript -e '
-          if (!require("move")) {
-            stop("No se pudo instalar el paquete move")
-          } else {
-            message("move instalado correctamente, versión: ", packageVersion("move"))
-          }'
-        
-        # Instalar otros paquetes necesarios
+        Rscript -e 'install.packages(c("pacman", "remotes", "htmlwidgets"), repos="https://cloud.r-project.org")'
         Rscript -e 'pacman::p_load(dplyr, lubridate, leaflet, htmlwidgets, sf, shiny)'
-        
-        # Verificar versiones
-        Rscript -e 'writeLines(sprintf("Versiones instaladas:\n- move: %s\n- leaflet: %s\n- htmlwidgets: %s",
-                          packageVersion("move"),
-                          packageVersion("leaflet"),
-                          packageVersion("htmlwidgets")))'
+        Rscript -e 'if (!"move" %in% installed.packages()[,"Package"]) remotes::install_version("move", version = "4.0.6", repos = "http://cran.us.r-project.org")'
+        Rscript -e 'packageVersion("htmlwidgets")'  # Verificar versión
 
     - name: Preparar entorno
       run: |
         # Crear y asegurar permisos en docs
         mkdir -p docs
         chmod -R 755 docs
-        rm -f docs/index.html || true
-        rm -rf docs/index_files || true
+        rm -f docs/index.html
+        rm -rf docs/index_files
 
     - name: Descargar datos de Movebank
       run: |
         Rscript 00_Download_data_Movebank.R
         if ! ls gps_data_*.csv 1> /dev/null 2>&1; then
           echo "::error::No se generó ningún archivo gps_data_*.csv"
-          echo "Archivos en directorio:"
-          ls -la
+          ls -la  # Listar archivos para debug
           exit 1
         fi
       env:
@@ -100,30 +65,30 @@ jobs:
         Rscript -e 'sessionInfo()'
         
         echo "=== Generando mapa ==="
-        Rscript --vanilla 01_Interactive_map.R
+        Rscript --verbose 01_Interactive_map.R
         
         echo "=== Verificando salida ==="
-        echo "Estructura de docs/:"
-        ls -l docs/
-        
         if [ ! -f "docs/index.html" ]; then
           echo "::error::El archivo docs/index.html no se generó"
+          ls -R docs/  # Listar contenido para debug
           exit 1
         fi
         
         if [ ! -d "docs/index_files" ] || [ -z "$(ls -A docs/index_files)" ]; then
-          echo "::error::La carpeta docs/index_files no se generó correctamente o está vacía"
+          echo "::error::La carpeta docs/index_files no se generó correctamente"
+          echo "Contenido de docs/:"
+          ls -l docs/
           exit 1
         fi
         
-        echo "=== Contenido de docs/index_files ==="
-        ls -l docs/index_files/
+        echo "=== Estructura generada correctamente ==="
+        ls -R docs/
 
     - name: Subir cambios a GitHub
       run: |
         git config --global user.name "github-actions"
         git config --global user.email "actions@github.com"
-        git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/BioChess/Map_Larus_Alboran.git
+        git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/BioChess/Map_GULARI_Galicia.git
         
         # Obtener los últimos cambios
         git pull origin main
