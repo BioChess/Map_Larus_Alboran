@@ -107,8 +107,8 @@ imap <- imap %>%
   addLegend(
     position = "bottomright",
     colors = c(color_ichaud, color_larmic),
-    labels = c("ICHAUD", "LARMIC"),
-    title = "Especie",
+    labels = c("Audouin's gull", "Yellow-legged gull"),
+    title = "Species",
     opacity = 1
   )
 
