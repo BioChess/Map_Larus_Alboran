@@ -23,6 +23,10 @@ pal.colors <- colorFactor(palette = "Set1", domain = gps.df$birdID)
 green_palette <- colorRampPalette(c("gold4", "darkorange"))(10)
 orange_palette <- colorRampPalette(c("lightgreen", "darkgreen"))(10)
 
+# Elige un color representativo de cada paleta
+color_ichaud <- green_palette[1]
+color_larmic <- orange_palette[1]
+
 # Función para asignar colores según el prefijo del birdID
 get_color <- function(birdID) {
   if (startsWith(as.character(birdID), "6")) {
@@ -99,7 +103,14 @@ update_label <- paste0("Última actualización: ", format(Sys.time(), "%d-%m-%Y 
 
 # Añadir el control al mapa (abajo a la derecha)
 imap <- imap %>%
-  addControl(html = update_label, position = "topright")
+  addControl(html = update_label, position = "topright")%>%
+  addLegend(
+    position = "bottomright",
+    colors = c(color_ichaud, color_larmic),
+    labels = c("ICHAUD", "LARMIC"),
+    title = "Especie",
+    opacity = 1
+  )
 
 if (length(imap$x$calls) == 0) {
   imap <- imap %>% addControl(html = "Sin datos recientes para mostrar", position = "topright")
