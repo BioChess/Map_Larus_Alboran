@@ -24,8 +24,8 @@ green_palette <- colorRampPalette(c("gold4", "darkorange"))(10)
 orange_palette <- colorRampPalette(c("lightgreen", "darkgreen"))(10)
 
 # Elige un color representativo de cada paleta
-color_ichaud <- green_palette[1]
-color_larmic <- orange_palette[1]
+color_ichaud <- 'darkgreen'
+color_larmic <- 'orange'
 
 # Función para asignar colores según el prefijo del birdID
 get_color <- function(birdID) {
