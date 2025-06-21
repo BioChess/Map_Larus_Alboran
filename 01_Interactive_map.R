@@ -20,8 +20,8 @@ gps.df2 <- gps.df %>% filter(datetimeGMT >= lst_days)
 pal.colors <- colorFactor(palette = "Set1", domain = gps.df$birdID)
 
 # Crear las paletas de colores para ICHAUD y LARMIC
-green_palette <- colorRampPalette(c("gold4", "darkorange"))(10)
-orange_palette <- colorRampPalette(c("lightgreen", "darkgreen"))(10)
+orange_palette <- colorRampPalette(c("gold4", "darkorange"))(10)
+green_palette <- colorRampPalette(c("lightgreen", "darkgreen"))(10)
 
 # Elige un color representativo de cada paleta
 color_ichaud <- 'darkgreen'
