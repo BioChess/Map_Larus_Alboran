@@ -99,8 +99,8 @@ for (bird in grupos) {
 timestamp <- format(Sys.time(), "%Y%m%d_%H%M", tz = "GMT", usetz = TRUE)
 
 # Crear texto HTML para mostrar en el mapa
-#update_label <- paste0("Last update: ", format(Sys.time(), "%d-%m-%Y %H:%M", tz = "GMT", usetz = TRUE))
-update_label <- paste0('<div class="custom-label">Last update: ', format(Sys.time(), "%d-%m-%Y %H:%M", tz = "GMT", usetz = TRUE), '</div>')
+update_label <- paste0("Last update: ", format(Sys.time(), "%d-%m-%Y %H:%M", tz = "GMT", usetz = TRUE))
+#update_label <- paste0('<div class="custom-label">Last update: ', format(Sys.time(), "%d-%m-%Y %H:%M", tz = "GMT", usetz = TRUE), '</div>')
 # Añadir el control al mapa (abajo a la derecha)
 imap <- imap %>%
   addControl(html = update_label, position = "topright")%>%
@@ -109,8 +109,8 @@ imap <- imap %>%
     colors = c(color_ichaud, color_larmic),
     labels = c("Audouin's gull", "Yellow-legged gull"),
     title = "Species",
-    opacity = 1,
-    className = "custom-legend"
+    opacity = 1#,
+    #className = "custom-legend"
   )
 
 if (length(imap$x$calls) == 0) {
