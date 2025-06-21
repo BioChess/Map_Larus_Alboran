@@ -1,0 +1,17 @@
+.custom-label {
+  font-size: 1em;
+}
+@media (max-width: 600px) {
+  .custom-label {
+    font-size: 0.7em;
+  }
+}
+
+.custom-legend {
+  font-size: 1em;
+}
+@media (max-width: 600px) {
+  .custom-legend {
+    font-size: 0.7em;
+  }
+}
