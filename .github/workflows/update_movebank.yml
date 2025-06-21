@@ -31,14 +31,12 @@ jobs:
           pandoc \
           libudunits2-dev \
           libproj-dev
-
     - name: Instalar paquetes R
       run: |
         Rscript -e 'install.packages(c("pacman", "remotes", "htmlwidgets"), repos="https://cloud.r-project.org")'
         Rscript -e 'pacman::p_load(dplyr, lubridate, leaflet, htmlwidgets, sf, shiny)'
         Rscript -e 'if (!"move" %in% installed.packages()[,"Package"]) remotes::install_version("move", version = "4.0.6", repos = "http://cran.us.r-project.org")'
         Rscript -e 'packageVersion("htmlwidgets")'  # Verificar versión
-
     - name: Preparar entorno
       run: |
         # Crear y asegurar permisos en docs
@@ -46,7 +44,6 @@ jobs:
         chmod -R 755 docs
         rm -f docs/index.html
         rm -rf docs/index_files
-
     - name: Descargar datos de Movebank
       run: |
         Rscript 00_Download_data_Movebank.R
@@ -83,32 +80,6 @@ jobs:
         
         echo "=== Estructura generada correctamente ==="
         ls -R docs/
-
-    - name: Crear custom.css responsivo
-      run: |
-        cat > docs/custom.css << 'EOF'
-.custom-label {
-  font-size: 1em;
-}
-@media (max-width: 600px) {
-  .custom-label {
-    font-size: 0.7em;
-  }
-}
-.custom-legend {
-  font-size: 1em;
-}
-@media (max-width: 600px) {
-  .custom-legend {
-    font-size: 0.7em;
-  }
-}
-EOF
-
-    - name: Insertar custom.css en index.html
-      run: |
-        sed -i '/<\/head>/i <link rel="stylesheet" href="custom.css">' docs/index.html
-
     - name: Subir cambios a GitHub
       run: |
         git config --global user.name "github-actions"
@@ -123,7 +94,7 @@ EOF
         
         # Agregar cambios
         git add gps_data_*.csv
-        git add docs/index.html docs/index_files/* docs/custom.css
+        git add docs/index.html docs/index_files/*
         
         # Verificar si hay cambios
         if [ -z "$(git status --porcelain)" ]; then
