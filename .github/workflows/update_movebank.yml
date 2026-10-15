@@ -99,4 +99,22 @@ jobs:
         git reset --hard origin/main
 
         # Restaurar el mapa generado encima del estado de origin/main
-        rm -rf docs/index.html
+        rm -rf docs/index.html docs/index_files
+        mkdir -p docs
+        cp -r /tmp/out/docs/. docs/
+
+        # Dejar de versionar los CSV (los que ya estuvieran subidos se eliminan del repo)
+        git rm --cached --ignore-unmatch -q 'gps_data_*.csv'
+
+        # Agregar solo el mapa, incluidos los archivos borrados
+        git add -A -- docs
+
+        # Verificar si hay cambios
+        if [ -z "$(git status --porcelain)" ]; then
+          echo "No hay cambios para hacer commit"
+        else
+          git commit -m "Actualización automática del mapa $(date +'%Y-%m-%d %H:%M')"
+          git push origin main
+        fi
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
